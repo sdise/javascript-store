@@ -1,4 +1,4 @@
-# telegram web k 去除表情包  
+# :telegram web k 去除表情包:  
 代码由AI提供  
 ### 脚本逻辑解析：
 
