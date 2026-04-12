@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Telegram Web K 表情包消息彻底抹除
+// @name         Telegram Web K 表情包彻底抹除 (修正版)
 // @namespace    http://tampermonkey.net/
-// @version      6.0
-// @description  永久抹除所有包含表情包的消息气泡（官方+自制），不留位置，不占空间。
+// @version      7.0
+// @description  修正悬停隐藏问题。只抹除作为消息发送的表情包，不干扰文字回应按钮。
 // @author       User
 // @match        https://web.telegram.org/k/*
 // @grant        GM_addStyle
@@ -12,18 +12,24 @@
 (function() {
     'use strict';
 
-    // 使用 :has() 选择器匹配包含表情包容器的整条消息气泡 (.bubble)
-    // display: none 会将整条消息从 DOM 流中移除，不留任何缝隙
+    // 弃用模糊匹配 [class*="sticker"]
+    // 改用 Web K 核心表情容器类名：
+    // .sticker-fixed-size: 官方和大多数自制表情
+    // .animated-sticker: 动态表情专用
+    // video.media-sticker: 视频表情专用
     GM_addStyle(`
-        /* 匹配包含官方动画表情、静态表情、自制表情、视频表情的整条气泡 */
+        /* 1. 核心屏蔽逻辑 */
         .bubble:has(.sticker-fixed-size),
-        .bubble:has([class*="sticker"]),
+        .bubble:has(.animated-sticker),
         .bubble:has(video.media-sticker),
-        .bubble:has(.animated-sticker) {
+        .bubble:has(img.media-sticker) {
             display: none !important;
         }
 
-        /* 排除掉那些虽然有 sticker 类名但其实是普通图片的特殊情况（如有） */
+        /* 2. 补丁：防止某些混合消息被误删（可选） */
+        /* 如果一条消息既有文字又有表情包，通常 TG 会拆分成两条气泡，所以这里很安全 */
+        
+        /* 3. 确保图片消息绝对显示 */
         .bubble:has(.media-photo) {
             display: flex !important;
         }
