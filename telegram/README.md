@@ -1,4 +1,3 @@
-html
 <h1 align="center">telegram web k 去除表情包</h1>
 
 代码由AI提供  
