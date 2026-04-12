@@ -1,6 +1,6 @@
 <h1 align="center">telegram web k 去除表情包</h1>
 
-代码由AI提供  
+*代码由AI提供*  
 ### 脚本逻辑解析：
 
 1.  **彻底消失 (`display: none`)**：
